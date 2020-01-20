@@ -1,3 +1,10 @@
+package Estruturas;
+
+import Exceptions.ElementNotFoundException;
+import Exceptions.EmptyCollectionException;
+import Interfaces.ListADT;
+
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayList<T> implements ListADT<T>
@@ -12,6 +19,8 @@ public class ArrayList<T> implements ListADT<T>
         rear = 0;
         list = (T[])(new Object[DEFAULT_CAPACITY]);
     }
+
+
 
     public ArrayList (int initialCapacity)
     {
@@ -55,7 +64,7 @@ public class ArrayList<T> implements ListADT<T>
         int index = find (element);
 
         if (index == NOT_FOUND)
-            throw new ElementNotFoundException ();
+            throw new ElementNotFoundException();
 
         result = list[index];
         rear--;
@@ -119,7 +128,7 @@ public class ArrayList<T> implements ListADT<T>
 
     public Iterator<T> iterator()
     {
-        return new ArrayIterator<T> (list, rear);
+        return new ArrayIterator<T>(list, rear);
     }
 
     public String toString()

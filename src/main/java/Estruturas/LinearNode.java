@@ -1,3 +1,5 @@
+package Estruturas;
+
 public class LinearNode<T> {
     private T elem;
     private LinearNode<T> next;

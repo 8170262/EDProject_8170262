@@ -1,3 +1,8 @@
+package Estruturas;
+
+import Exceptions.EmptyCollectionException;
+import Interfaces.QueueADT;
+
 public class LinkedQueue<T> implements QueueADT<T> {
 
 

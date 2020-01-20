@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="Ficha_ED.main" target="1.8" />
-      <module name="Ficha_ED.test" target="1.8" />
+      <module name="EDProject_8170262.main" target="1.8" />
+      <module name="EDProject_8170262.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

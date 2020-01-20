@@ -1,3 +1,8 @@
+package Estruturas;
+
+import Exceptions.EmptyCollectionException;
+import Interfaces.QueueADT;
+
 public class CircularArrayQueue<T> implements QueueADT<T> {
 
     private final int DEFAULT_CAPACITY = 100;

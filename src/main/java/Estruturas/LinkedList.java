@@ -1,3 +1,8 @@
+package Estruturas;
+
+import Exceptions.ElementNotFoundException;
+import Exceptions.EmptyCollectionException;
+
 public class LinkedList<T> {
     protected int count;
     protected LinearNode<T> head,tail;
@@ -40,7 +45,7 @@ public class LinkedList<T> {
     }
 
 
-    public T removeFirst() throws EmptyCollectionException{
+    public T removeFirst() throws EmptyCollectionException {
         if(isEmpty()){
             throw new EmptyCollectionException("List");
         }

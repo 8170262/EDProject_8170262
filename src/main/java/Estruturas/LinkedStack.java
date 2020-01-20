@@ -1,3 +1,8 @@
+package Estruturas;
+
+import Exceptions.EmptyStackException;
+import Interfaces.StackADT;
+
 public class LinkedStack<T> implements StackADT<T>
 {
     private int count;
@@ -11,7 +16,7 @@ public class LinkedStack<T> implements StackADT<T>
 
     public void push (T element)
     {
-        LinearNode<T> temp = new LinearNode<T> (element);
+        LinearNode<T> temp = new LinearNode<T>(element);
 
         temp.setNext(top);
         top = temp;

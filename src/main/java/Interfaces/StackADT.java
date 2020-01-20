@@ -1,3 +1,5 @@
+package Interfaces;
+
 public interface StackADT<T> {
 
     public void push (T element);

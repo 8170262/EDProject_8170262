@@ -1,3 +1,5 @@
+package Interfaces;
+
 public interface QueueADT<T> {
 
     public void enqueue (T element);

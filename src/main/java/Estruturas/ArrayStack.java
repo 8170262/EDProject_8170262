@@ -1,3 +1,8 @@
+package Estruturas;
+
+import Exceptions.EmptyStackException;
+import Interfaces.StackADT;
+
 public class ArrayStack<T> implements StackADT<T>
 {
     private final int DEFAULT_CAPACITY = 100;

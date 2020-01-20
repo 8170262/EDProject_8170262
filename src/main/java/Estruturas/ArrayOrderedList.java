@@ -1,5 +1,8 @@
-public class ArrayOrderedList<T> extends ArrayList<T>
-        implements OrderedListADT<T>
+package Estruturas;
+
+import Interfaces.OrderedListADT;
+
+public class ArrayOrderedList<T> extends ArrayList<T> implements OrderedListADT<T>
 {
     public ArrayOrderedList()
     {
