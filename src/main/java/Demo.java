@@ -5,6 +5,7 @@ import Mapa.Espaco;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class Demo {
 
@@ -52,5 +53,51 @@ public class Demo {
         }
         double vida=mapa.getPontos()-n.calculatePathWeigth(it2);
         System.out.println("Vida : " + vida);
+
+        manual(n,mapa, 1);
+    }
+
+    public static void manual(Network n,Mapa mapa, int dif){
+        Espaco current=new Espaco("",0,new String[]{});
+        String currentName;
+        Scanner sc = new Scanner(System.in);
+        int end=0, opcao=0, count=1,numLig=0;
+        double vida=mapa.getPontos();
+        for(Espaco esp:mapa.getMapa()){
+            for (String i:esp.getLigacoes()){
+                if (i.equals("entrada")){
+                    current=esp;
+                }
+            }
+        }
+
+
+        do{
+            numLig=0;
+            for (String i: current.getLigacoes()){
+                numLig++;
+                System.out.println(numLig+" - "+i);
+            }
+
+            opcao=sc.nextInt();
+
+            currentName=current.getLigacoes()[opcao-1];
+            current=n.getVertex(currentName);
+            vida=vida-(current.getFantasma()*dif);
+
+
+            for (String liga:current.getLigacoes()){
+                if(liga.equals("exterior")){
+                    end=1;
+                }
+            }
+
+        }while(end != 1 && vida>0);
+        if (vida>=0){
+            System.out.println("Conseguiste sair!!!! Com "+vida+" de vida restante.");
+        }else{
+            System.out.println("Perdes-te!!! Ficaste sem vida!");
+        }
+
     }
 }
