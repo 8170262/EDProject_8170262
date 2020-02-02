@@ -4,7 +4,6 @@ package Estruturas;
 import Interfaces.GraphADT;
 import Mapa.Espaco;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class Graph<T> implements GraphADT<T> {
@@ -142,10 +141,10 @@ public class Graph<T> implements GraphADT<T> {
             visited[i] = false;
         }
 
-        traversalQueue.enqueue(new Integer(startVertexaux));
+        //traversalQueue.enqueue(new Integer(startVertexaux));
         visited[startVertexaux] = true;
 
-        x = 0;
+        x = startVertexaux;
         while (j < 2) {
             while (!traversalQueue.isEmpty()) {
                 x = traversalQueue.dequeue();

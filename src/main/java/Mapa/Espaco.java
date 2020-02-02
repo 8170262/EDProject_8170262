@@ -1,13 +1,15 @@
 package Mapa;
 
+import Estruturas.ArrayUnorderedList;
+
 import java.util.Arrays;
 
 public class Espaco {
     private String aposento;
     private int fantasma;
-    private String[] ligacoes;
+    private ArrayUnorderedList<String> ligacoes;
 
-    public Espaco(String aposento, int fantasma, String[] ligacoes) {
+    public Espaco(String aposento, int fantasma, ArrayUnorderedList<String> ligacoes) {
         this.aposento = aposento;
         this.fantasma = fantasma;
         this.ligacoes = ligacoes;
@@ -29,11 +31,11 @@ public class Espaco {
         this.fantasma = fantasma;
     }
 
-    public String[] getLigacoes() {
+    public ArrayUnorderedList<String> getLigacoes() {
         return ligacoes;
     }
 
-    public void setLigacoes(String[] ligacoes) {
+    public void setLigacoes(ArrayUnorderedList<String> ligacoes) {
         this.ligacoes = ligacoes;
     }
 
@@ -42,7 +44,7 @@ public class Espaco {
         return "Espaco{" +
                 "aposento='" + aposento + '\'' +
                 ", fantasma=" + fantasma +
-                ", ligacoes=" + Arrays.toString(ligacoes) +
+                ", ligacoes=" + ligacoes.toString() +
                 '}';
     }
 }

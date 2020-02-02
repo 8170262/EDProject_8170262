@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import static java.lang.Math.toIntExact;
 
+import Estruturas.ArrayUnorderedList;
 import Mapa.Mapa;
 import Mapa.Espaco;
 import org.json.simple.parser.JSONParser;
@@ -29,17 +30,17 @@ public class FileManager{
 
             int contaEspacos = 0, fantasma;
             String aposento;
-            String[] ligacoesArray;
+            ArrayUnorderedList<String> ligacoesArray;
             for (Object a : espacos) {
                 if (a instanceof JSONObject) {
                     aposento = (String) ((JSONObject) a).get("aposento");
                     fantasma = toIntExact((Long) ((JSONObject) a).get("fantasma"));
 
                     JSONArray ligacoes = (JSONArray) ((JSONObject) a).get("ligacoes");
-                    ligacoesArray = new String[ligacoes.size()];
+                    ligacoesArray=new ArrayUnorderedList<>(ligacoes.size());
 
                     for (int contaLigacoes=0;contaLigacoes<ligacoes.size();contaLigacoes++) {
-                        ligacoesArray[contaLigacoes]=ligacoes.get(contaLigacoes).toString();
+                        ligacoesArray.addToRear(ligacoes.get(contaLigacoes).toString());
                     }
 
                     espacoArray[contaEspacos] = new Espaco(aposento, fantasma, ligacoesArray);

@@ -3,6 +3,8 @@ package Estruturas;
 import Exceptions.ElementNotFoundException;
 import Interfaces.UnorderedListADT;
 
+import java.util.Arrays;
+
 public class ArrayUnorderedList<T> extends ArrayList<T> implements UnorderedListADT<T>
 {
 
@@ -50,5 +52,10 @@ public class ArrayUnorderedList<T> extends ArrayList<T> implements UnorderedList
 
         list[scan] = element;
         rear++;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(list);
     }
 }

@@ -2,7 +2,8 @@ package Estruturas;
 
 import Interfaces.NetworkADT;
 import Mapa.Espaco;
-import Mapa.Mapa;
+
+import java.util.Iterator;
 
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
@@ -29,7 +30,7 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
     public void calculateWeigth() {
         int i = 0, j = 0;
         Espaco[] espacos = new Espaco[vertices.length];
-        String[] ligacoes;
+        ArrayUnorderedList<String> ligacoes;
 
         while(i < vertices.length){
             espacos[i] = (Espaco) vertices[i];
@@ -41,9 +42,10 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         while (i < numVertices) {
 
             ligacoes = espacos[i].getLigacoes();
-
-            while (j < ligacoes.length) {
-                addEdge( (T) espacos[i], (T) getVertex(ligacoes[j]), (getVertex(ligacoes[j]).getFantasma()+1));
+            Iterator it=ligacoes.iterator();
+            while (it.hasNext()) {
+                String lig=(String) it.next();
+                addEdge( (T) espacos[i], (T) getVertex(lig), (getVertex(lig).getFantasma()+1));
                 j++;
             }
             j = 0;
