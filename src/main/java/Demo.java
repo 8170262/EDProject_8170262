@@ -3,6 +3,7 @@ import Estruturas.ArrayUnorderedList;
 import Estruturas.Network;
 import Mapa.Mapa;
 import Mapa.Espaco;
+import Mapa.FileManager;
 import Mapa.Classificacao;
 
 import java.util.Iterator;
@@ -39,9 +40,9 @@ public class Demo {
                         n.addVertex(entrada);
                     }
                     if(lig.equals("exterior")){
-                        final int N = arrayExterior.length;
-                        arrayExterior = Arrays.copyOf(arrayExterior, N + 1);
-                        arrayExterior[N] = espacos[i].getAposento();
+                        int n = arrayExterior.length;
+                        arrayExterior = Arrays.copyOf(arrayExterior, n + 1);
+                        arrayExterior[n] = espacos[i].getAposento();
                     }
                 }
                 i++;
@@ -91,8 +92,10 @@ public class Demo {
                     String path;
                     //path = sc.next();
                     path="C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\mapa1.json";
-                    mapa = fm.readFile(path);
-                    mapas.addToRear(mapa);
+                    if (!mapas.contains(fm.readFile(path))) {
+                        mapa = fm.readFile(path);
+                        mapas.addToRear(mapa);
+                    }
                     break;
                 case 2:
                     int opcao2=0;
@@ -185,7 +188,7 @@ public class Demo {
         } while (opcao != 0);
     }
 
-    public static void manual(Network n, Mapa mapa, int dif){
+    private static void manual(Network n, Mapa mapa, int dif){
         Espaco current=new Espaco("",0,new ArrayUnorderedList<>());
         String currentName="";
         Scanner sc = new Scanner(System.in);
@@ -243,7 +246,7 @@ public class Demo {
 
 
         if (opcao!=0) {
-            if (vida >= 0) {
+            if (vida > 0) {
                 if (classif.isEmpty()){
                     ArrayOrderedList<Double> db=new ArrayOrderedList<>();
                     db.add(vida);
@@ -273,7 +276,7 @@ public class Demo {
         }
     }
 
-    public static void simulacao(Network n, Mapa mapa){
+    private static void simulacao(Network n, Mapa mapa){
         int i=0;
 
         Iterator it = n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));

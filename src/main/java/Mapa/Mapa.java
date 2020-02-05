@@ -38,6 +38,26 @@ public class Mapa {
     }
 
     @Override
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Mapa or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Mapa)) {
+            return false;
+        }
+
+        // typecast o to Mapa so that we can compare data members
+        Mapa c = (Mapa) o;
+
+        // Compare the data members and return accordingly
+        return this.getNome().equals(c.getNome());
+    }
+
+    @Override
     public String toString() {
         return "Mapa{" +
                 "nome='" + nome + '\'' +

@@ -106,6 +106,11 @@ public class Graph<T> implements GraphADT<T> {
 
     }
 
+    /**
+     * Metodo para encontrar o vertice apartir do nome
+     * @param aposento
+     * @return
+     */
     public Espaco getVertex(String aposento) {
         int i = 0;
         Espaco[] espacos = new Espaco[numVertices];
@@ -125,6 +130,11 @@ public class Graph<T> implements GraphADT<T> {
         return null;
     }
 
+    /**
+     * Metodo para descobrir as ligaçoes deste vertice
+     * @param vertex
+     * @return retorna o iterador de uma lista com as ligaçoes do vertice
+     */
     public Iterator adjVertex(T vertex) {
         Integer x, startVertexaux, j = 0;
         startVertexaux = getVertexIndex(vertex);
@@ -141,7 +151,6 @@ public class Graph<T> implements GraphADT<T> {
             visited[i] = false;
         }
 
-        //traversalQueue.enqueue(new Integer(startVertexaux));
         visited[startVertexaux] = true;
 
         x = startVertexaux;
@@ -151,10 +160,6 @@ public class Graph<T> implements GraphADT<T> {
                 resultList.addToRear(vertices[x.intValue()]);
             }
 
-            /**
-             * Find all vertices adjacent to x that have not been visited and
-             * queue them up
-             */
             if (j < 1) {
                 for (int i = 0; i < numVertices; i++) {
                     if (adjMatrix[x.intValue()][i] > 0 && !visited[i]) {
@@ -193,10 +198,7 @@ public class Graph<T> implements GraphADT<T> {
         while (!traversalQueue.isEmpty()) {
             x = traversalQueue.dequeue();
             resultList.addToRear(vertices[x.intValue()]);
-            /**
-             * Find all vertices adjacent to x that have not been visited and
-             * queue them up
-             */
+
             for (int i = 0; i < numVertices; i++) {
                 if (adjMatrix[x.intValue()][i] > 0 && !visited[i]) {
                     traversalQueue.enqueue(new Integer(i));
@@ -231,10 +233,7 @@ public class Graph<T> implements GraphADT<T> {
         while (!traversalStack.isEmpty()) {
             x = traversalStack.peek();
             found = false;
-            /**
-             * Find a vertex adjacent to x that has not been visited and push it
-             * on the stack
-             */
+
             for (int i = 0; (i < numVertices) && !found; i++) {
                 if (adjMatrix[x.intValue()][i] > 0 && !visited[i]) {
                     traversalStack.push(new Integer(i));
@@ -250,6 +249,12 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
+    /**
+     * Metodo que devolve um iterador com o caminho com menos peso entre 2 vertices
+     * @param startVertex the starting vertex
+     * @param targetVertex the ending vertex
+     * @return
+     */
     @Override
     public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
         Integer x, startVertexaux, targetVertexaux, aux;
@@ -349,6 +354,11 @@ public class Graph<T> implements GraphADT<T> {
         return -1;
     }
 
+    /**
+     * Calcula o peso do caminho daquele Iterador
+     * @param path
+     * @return
+     */
     public double calculatePathWeigth(Iterator path) {
         Espaco[] espacos = new Espaco[numVertices];
         Iterator pathAux;

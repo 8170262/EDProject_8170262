@@ -16,17 +16,24 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         addEdge(getVertexIndex(vertex1), getVertexIndex(vertex2), weight);
     }
 
+    /**
+     * Cria a matriz de adjacencia
+     * @param vertex1
+     * @param vertex2
+     * @param weight
+     */
     public void addEdge(int vertex1, int vertex2, double weight) {
         if (vertex1 == -1 || vertex2 == -1) {
             System.out.println("vértices invalidos");
         } else {
-
             adjMatrix[vertex1][vertex2] = weight;
-
         }
-
     }
 
+    /**
+     * calcula os pesos das ligaçoes do grafo
+     * Cria a matriz de adjacencia
+     */
     public void calculateWeigth() {
         int i = 0, j = 0;
         Espaco[] espacos = new Espaco[vertices.length];
@@ -51,7 +58,6 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
             j = 0;
             i++;
         }
-
     }
 
     @Override

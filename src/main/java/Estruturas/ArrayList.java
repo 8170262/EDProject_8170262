@@ -4,7 +4,6 @@ import Exceptions.ElementNotFoundException;
 import Exceptions.EmptyCollectionException;
 import Interfaces.ListADT;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayList<T> implements ListADT<T>
