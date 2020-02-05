@@ -3,11 +3,11 @@ package GUI;
 import Estruturas.ArrayOrderedList;
 import Estruturas.ArrayUnorderedList;
 import Estruturas.Network;
-import Mapa.Mapa;
-import Mapa.Espaco;
-import Mapa.Classificacao;
+import Estruturas.Mapa;
+import Estruturas.Espaco;
+import Estruturas.Classificacao;
 
-import Mapa.FileManager;
+import Estruturas.FileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,8 +32,8 @@ public class MenuGUI extends JFrame{
     private JPanel classifCard;
     private JLabel imageHome;
     private JPanel manualCard1;
-    private JButton fácilButton;
-    private JButton médioButton;
+    private JButton facilButton;
+    private JButton medioButton;
     private JButton dificilButton;
     private JLabel currentEspLabel;
     private JPanel doorPanel;
@@ -53,6 +53,10 @@ public class MenuGUI extends JFrame{
 
     private CardLayout cLayout;
 
+    /**
+     * Construtor que contem todos os listenenrs dos botoes da aplicação
+     * Neste metodo é inserido um mapa "default"
+     */
     public MenuGUI() {
         inserirMapa("C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\mapa.json");
 
@@ -113,7 +117,7 @@ public class MenuGUI extends JFrame{
                 cLayout.show(cardLayout,"home");
             }
         });
-        fácilButton.addActionListener(new ActionListener() {
+        facilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 cLayout.show(cardLayout,"manual1");
@@ -121,7 +125,7 @@ public class MenuGUI extends JFrame{
 
             }
         });
-        médioButton.addActionListener(new ActionListener() {
+        medioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 cLayout.show(cardLayout,"manual1");
@@ -155,6 +159,12 @@ public class MenuGUI extends JFrame{
             }
         });
     }
+
+    /**
+     * Metodo para inserir o mapa, se já não existir um mapa com o mesmo nome
+     * Ainda chama para calcular o grafo e adiciona o mapa á lista de mapas
+     * @param path
+     */
     private void inserirMapa(String path){
         if (!mapas.contains(fm.readFile(path))){
             mapa = fm.readFile(path);
@@ -164,6 +174,9 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    /**
+     * Instancia o grafo para este mapa
+     */
     private void setNetGraph(){
         n=new Network();
         int i=0,k=0;
@@ -202,6 +215,9 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    /**
+     * Metodo para escolher o mapa que quer jogar
+     */
     private void chooseMap(){
         Iterator it=mapas.iterator();
         mapasPanel.removeAll();
@@ -227,6 +243,12 @@ public class MenuGUI extends JFrame{
         mapasPanel.repaint();
     }
 
+    /**
+     * Método do jogo em manual
+     * @param dif
+     * @param current
+     * @param vida
+     */
     private void manualGame( int dif, Espaco current,Double vida){
         try {
             if (vida > 0) {
@@ -305,6 +327,10 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    /**
+     * Metodo para adicionar a pontuação á classificaçao
+     * @param vida
+     */
     private void addToClassif(Double vida){
         if (classif.isEmpty()){
             ArrayOrderedList<Double> db=new ArrayOrderedList<>();
@@ -330,6 +356,9 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    /**
+     * Metodo que devolve a melhor solução para este mapa
+     */
     private void simulacao(){
         int i=0;
 
@@ -369,6 +398,9 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    /**
+     * Metodo que mostra o TOP 10 das pontuaçoes deste mapa
+     */
     private void classificacao(){
         Iterator it=classif.iterator();
         classifCard.removeAll();

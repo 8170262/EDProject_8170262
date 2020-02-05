@@ -2,7 +2,7 @@ import GUI.MenuGUI;
 
 import javax.swing.*;
 
-public class Main {
+public class StartWithInterfaceGrafica {
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         MenuGUI menuGUI=new MenuGUI();

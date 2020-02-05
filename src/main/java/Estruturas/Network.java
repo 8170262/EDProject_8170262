@@ -1,7 +1,6 @@
 package Estruturas;
 
 import Interfaces.NetworkADT;
-import Mapa.Espaco;
 
 import java.util.Iterator;
 

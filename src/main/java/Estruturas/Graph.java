@@ -2,7 +2,6 @@ package Estruturas;
 
 
 import Interfaces.GraphADT;
-import Mapa.Espaco;
 
 import java.util.Iterator;
 

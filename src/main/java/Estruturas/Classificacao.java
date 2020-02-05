@@ -1,6 +1,4 @@
-package Mapa;
-
-import Estruturas.ArrayOrderedList;
+package Estruturas;
 
 public class Classificacao {
     private Mapa mapa;

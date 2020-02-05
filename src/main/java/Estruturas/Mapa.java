@@ -1,4 +1,4 @@
-package Mapa;
+package Estruturas;
 
 import java.util.Arrays;
 

@@ -1,13 +1,10 @@
-package Mapa;
+package Estruturas;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import static java.lang.Math.toIntExact;
 
-import Estruturas.ArrayUnorderedList;
-import Mapa.Mapa;
-import Mapa.Espaco;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.json.simple.*;

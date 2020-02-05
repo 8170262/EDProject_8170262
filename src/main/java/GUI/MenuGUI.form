@@ -235,7 +235,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="ddd92" class="javax.swing.JButton" binding="fácilButton" default-binding="true">
+                  <component id="ddd92" class="javax.swing.JButton" binding="facilButton">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -245,7 +245,7 @@
                       <text value="Fácil"/>
                     </properties>
                   </component>
-                  <component id="83346" class="javax.swing.JButton" binding="médioButton" default-binding="true">
+                  <component id="83346" class="javax.swing.JButton" binding="medioButton">
                     <constraints>
                       <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>

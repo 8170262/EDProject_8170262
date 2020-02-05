@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Estruturas</OriginalElement>
+  <nodes>
+    <node x="0.0" y="188.0">Estruturas.ArrayOrderedList</node>
+    <node x="145.07291666666666" y="0.0">Estruturas.ArrayIterator</node>
+    <node x="391.6650210084032" y="297.0">Estruturas.LinkedBinaryTree</node>
+    <node x="97.19924719887945" y="495.0">Estruturas.Mapa</node>
+    <node x="880.7158963585434" y="188.0">Estruturas.LinkedList</node>
+    <node x="741.4419642857142" y="79.0">Estruturas.LinearNode</node>
+    <node x="514.9443452380951" y="495.0">Estruturas.Graph</node>
+    <node x="244.07843137254895" y="376.0">Estruturas.Espaco</node>
+    <node x="749.7158963585434" y="188.0">Estruturas.LinkedStack</node>
+    <node x="321.23970588235295" y="584.0">Estruturas.Network</node>
+    <node x="197.0" y="658.0">Estruturas.ArrayStack</node>
+    <node x="155.07291666666666" y="79.0">Estruturas.ArrayList</node>
+    <node x="30.745098039215634" y="584.0">Estruturas.Classificacao</node>
+    <node x="237.1108893557421" y="188.0">Estruturas.ArrayUnorderedList</node>
+    <node x="549.6650210084032" y="297.0">Estruturas.HeapNode</node>
+    <node x="166.74509803921563" y="584.0">Estruturas.FileManager</node>
+    <node x="611.7158963585434" y="188.0">Estruturas.LinkedQueue</node>
+    <node x="0.0" y="658.0">Estruturas.CircularArrayQueue</node>
+    <node x="496.5704131652659" y="376.0">Estruturas.LinkedHeap</node>
+    <node x="438.02303921568625" y="188.0">Estruturas.BinaryTreeNode</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Estruturas.LinkedHeap" target="Estruturas.HeapNode">
+      <point x="22.200000000000045" y="-14.5" />
+      <point x="574.270413165266" y="346.0" />
+      <point x="602.1650210084032" y="346.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="Estruturas.ArrayList" target="Estruturas.ArrayIterator">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Network" target="Estruturas.ArrayUnorderedList">
+      <point x="0.0" y="-14.5" />
+      <point x="367.73970588235295" y="544.0" />
+      <point x="339.57843137254895" y="544.0" />
+      <point x="339.57843137254895" y="277.0" />
+      <point x="312.1108893557421" y="277.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Classificacao" target="Estruturas.ArrayOrderedList">
+      <point x="-43.5" y="-14.5" />
+      <point x="45.245098039215634" y="564.0" />
+      <point x="63.0" y="564.0" />
+      <point x="63.0" y="277.0" />
+      <point x="34.25" y="277.0" />
+      <point x="-34.25" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedHeap" target="Estruturas.LinkedBinaryTree">
+      <point x="-44.400000000000034" y="-14.5" />
+      <point x="507.6704131652658" y="356.0" />
+      <point x="426.1650210084032" y="356.0" />
+      <point x="-34.5" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Graph" target="Estruturas.LinkedQueue">
+      <point x="20.0" y="-14.5" />
+      <point x="574.9443452380951" y="455.0" />
+      <point x="717.8212885154061" y="455.0" />
+      <point x="717.8212885154061" y="277.0" />
+      <point x="714.9658963585434" y="277.0" />
+      <point x="44.25" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Network" target="Estruturas.Graph">
+      <point x="37.200000000000045" y="-14.5" />
+      <point x="404.939705882353" y="564.0" />
+      <point x="574.9443452380951" y="564.0" />
+      <point x="20.0" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedStack" target="Estruturas.LinearNode">
+      <point x="-37.0" y="-14.5" />
+      <point x="768.2158963585434" y="168.0" />
+      <point x="783.8308531746031" y="168.0" />
+      <point x="-12.111111111111114" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedList" target="Estruturas.LinearNode">
+      <point x="33.66666666666666" y="-14.5" />
+      <point x="964.8825630252101" y="128.0" />
+      <point x="844.3864087301587" y="128.0" />
+      <point x="48.44444444444446" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Espaco" target="Estruturas.ArrayUnorderedList">
+      <point x="21.25" y="-14.5" />
+      <point x="307.82843137254895" y="356.0" />
+      <point x="290.11470588235295" y="356.0" />
+      <point x="290.11470588235295" y="277.0" />
+      <point x="295.44422268907545" y="277.0" />
+      <point x="-16.66666666666663" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Graph" target="Estruturas.LinkedHeap">
+      <point x="-4.0" y="-14.5" />
+      <point x="550.9443452380951" y="425.0" />
+      <point x="524.3204131652659" y="425.0" />
+      <point x="-27.75" y="14.5" />
+    </edge>
+    <edge source="Estruturas.ArrayUnorderedList" target="Estruturas.ArrayList">
+      <point x="-37.5" y="-14.5" />
+      <point x="274.6108893557421" y="168.0" />
+      <point x="213.82291666666666" y="168.0" />
+      <point x="11.75" y="14.5" />
+    </edge>
+    <edge source="Estruturas.FileManager" target="Estruturas.Espaco">
+      <point x="28.25" y="-14.5" />
+      <point x="251.49509803921563" y="564.0" />
+      <point x="257.23468137254895" y="564.0" />
+      <point x="257.23468137254895" y="475.0" />
+      <point x="270.64093137254895" y="475.0" />
+      <point x="-15.9375" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Network" target="Estruturas.Espaco">
+      <point x="-37.19999999999993" y="-14.5" />
+      <point x="330.539705882353" y="564.0" />
+      <point x="294.54851190476177" y="564.0" />
+      <point x="294.54851190476177" y="475.0" />
+      <point x="291.89093137254895" y="475.0" />
+      <point x="5.3125" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedQueue" target="Estruturas.LinearNode">
+      <point x="-39.33333333333337" y="-14.5" />
+      <point x="631.3825630252101" y="138.0" />
+      <point x="747.4975198412698" y="138.0" />
+      <point x="-48.44444444444444" y="14.5" />
+    </edge>
+    <edge source="Estruturas.HeapNode" target="Estruturas.BinaryTreeNode">
+      <point x="-26.25" y="-14.5" />
+      <point x="575.9150210084032" y="257.0" />
+      <point x="530.4230392156862" y="257.0" />
+      <point x="26.399999999999977" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Graph" target="Estruturas.LinkedStack">
+      <point x="28.0" y="-14.5" />
+      <point x="582.9443452380951" y="465.0" />
+      <point x="791.9419642857142" y="465.0" />
+      <point x="791.9419642857142" y="277.0" />
+      <point x="777.4658963585434" y="277.0" />
+      <point x="-27.75" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Graph" target="Estruturas.Espaco">
+      <point x="-28.0" y="-14.5" />
+      <point x="526.9443452380951" y="455.0" />
+      <point x="323.76593137254895" y="455.0" />
+      <point x="37.1875" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Classificacao" target="Estruturas.Mapa">
+      <point x="14.5" y="-14.5" />
+      <point x="103.24509803921563" y="564.0" />
+      <point x="106.94924719887945" y="564.0" />
+      <point x="-29.25" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedBinaryTree" target="Estruturas.BinaryTreeNode">
+      <point x="-19.714285714285666" y="-14.5" />
+      <point x="440.9507352941175" y="277.0" />
+      <point x="451.22303921568624" y="277.0" />
+      <point x="-52.80000000000001" y="14.5" />
+    </edge>
+    <edge source="Estruturas.FileManager" target="Estruturas.ArrayUnorderedList">
+      <point x="9.416666666666629" y="-14.5" />
+      <point x="232.66176470588226" y="564.0" />
+      <point x="229.78676470588226" y="564.0" />
+      <point x="229.78676470588226" y="277.0" />
+      <point x="262.1108893557421" y="277.0" />
+      <point x="-50.0" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedBinaryTree" target="Estruturas.ArrayUnorderedList">
+      <point x="-39.42857142857139" y="-14.5" />
+      <point x="421.23644957983186" y="237.0" />
+      <point x="378.7775560224088" y="237.0" />
+      <point x="66.66666666666674" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Mapa" target="Estruturas.Espaco">
+      <point x="19.5" y="-14.5" />
+      <point x="155.69924719887945" y="465.0" />
+      <point x="260.01593137254895" y="465.0" />
+      <point x="-26.5625" y="14.5" />
+    </edge>
+    <edge source="Estruturas.ArrayOrderedList" target="Estruturas.ArrayList">
+      <point x="-34.25" y="-14.5" />
+      <point x="34.25" y="158.0" />
+      <point x="166.82291666666666" y="158.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="Estruturas.LinkedBinaryTree" target="Estruturas.LinkedQueue">
+      <point x="39.428571428571445" y="-14.5" />
+      <point x="500.09359243697463" y="267.0" />
+      <point x="626.4658963585434" y="267.0" />
+      <point x="-44.25" y="14.5" />
+    </edge>
+    <edge source="Estruturas.Graph" target="Estruturas.ArrayUnorderedList">
+      <point x="-20.0" y="-14.5" />
+      <point x="534.9443452380951" y="445.0" />
+      <point x="372.5491071428571" y="445.0" />
+      <point x="372.5491071428571" y="267.0" />
+      <point x="328.7775560224088" y="267.0" />
+      <point x="16.666666666666742" y="14.5" />
+    </edge>
+    <edge source="Estruturas.FileManager" target="Estruturas.Mapa">
+      <point x="-47.08333333333337" y="-14.5" />
+      <point x="176.16176470588226" y="564.0" />
+      <point x="145.94924719887945" y="564.0" />
+      <point x="9.75" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="301.5" y="241.5" />
+  <SelectedNodes>
+    <node>Estruturas.ArrayUnorderedList</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

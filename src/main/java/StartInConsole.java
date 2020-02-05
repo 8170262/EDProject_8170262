@@ -1,15 +1,15 @@
 import Estruturas.ArrayOrderedList;
 import Estruturas.ArrayUnorderedList;
 import Estruturas.Network;
-import Mapa.Mapa;
-import Mapa.Espaco;
-import Mapa.FileManager;
-import Mapa.Classificacao;
+import Estruturas.Mapa;
+import Estruturas.Espaco;
+import Estruturas.FileManager;
+import Estruturas.Classificacao;
 
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class Demo {
+public class StartInConsole {
     private static ArrayUnorderedList<Classificacao> classif=new ArrayUnorderedList<>();
 
     public static void main(String[] args){
@@ -188,6 +188,12 @@ public class Demo {
         } while (opcao != 0);
     }
 
+    /**
+     * Método do jogo em manual
+     * @param n
+     * @param mapa
+     * @param dif
+     */
     private static void manual(Network n, Mapa mapa, int dif){
         Espaco current=new Espaco("",0,new ArrayUnorderedList<>());
         String currentName="";
@@ -276,6 +282,11 @@ public class Demo {
         }
     }
 
+    /**
+     * Metodo que devolve a melhor solução para este mapa
+     * @param n
+     * @param mapa
+     */
     private static void simulacao(Network n, Mapa mapa){
         int i=0;
 
