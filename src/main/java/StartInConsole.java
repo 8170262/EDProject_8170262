@@ -16,7 +16,7 @@ public class StartInConsole {
         Scanner sc = new Scanner(System.in);
 
         FileManager fm=new FileManager();
-        Mapa mapa=fm.readFile("C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\mapa.json");
+        Mapa mapa=fm.readFile("mapa.json");
         //System.out.println(mapa.toString());
 
 
@@ -90,8 +90,8 @@ public class StartInConsole {
                 case 1:
                     System.out.println("Insira o path para o ficheiro JSON");
                     String path;
-                    //path = sc.next();
-                    path="C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\mapa1.json";
+                    path = sc.next();
+                    //path="mapa1.json";
                     if (!mapas.contains(fm.readFile(path))) {
                         mapa = fm.readFile(path);
                         mapas.addToRear(mapa);

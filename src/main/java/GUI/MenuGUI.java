@@ -58,7 +58,7 @@ public class MenuGUI extends JFrame{
      * Neste metodo é inserido um mapa "default"
      */
     public MenuGUI() {
-        inserirMapa("C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\mapa.json");
+        inserirMapa("mapa.json");
 
 
 
@@ -151,7 +151,7 @@ public class MenuGUI extends JFrame{
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
-                JFileChooser jFileChooser1 = new JFileChooser("C:\\Users\\Pedro Luis\\Documents\\GitHub\\EDProject_8170262\\");
+                JFileChooser jFileChooser1 = new JFileChooser();
                 int returnvalue = jFileChooser1.showOpenDialog(null);
                 if (returnvalue == JFileChooser.APPROVE_OPTION) {
                     textField1.setText(jFileChooser1.getSelectedFile().getAbsolutePath());
