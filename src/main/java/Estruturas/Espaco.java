@@ -1,8 +1,5 @@
 package Estruturas;
 
-import Estruturas.ArrayUnorderedList;
-
-import java.util.Arrays;
 
 public class Espaco {
     private String aposento;

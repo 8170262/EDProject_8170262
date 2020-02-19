@@ -3,6 +3,7 @@ package Estruturas;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import static java.lang.Math.toIntExact;
 
 import org.json.simple.parser.JSONParser;
@@ -13,16 +14,15 @@ public class FileManager{
 
     public Mapa readFile(String path) {
         JSONParser parser = new JSONParser();
-        Mapa mapaNull = null;
+        Mapa mapaNull=null;
         try {
-            int pontos;
+            Double pontos;
             String nome;
             JSONObject file = (JSONObject) parser.parse(new FileReader(path));
-            //JSONObject file = (JSONObject) teste.get("mapa");
             Mapa mapa;
 
             nome = (String) file.get("nome");
-            pontos = toIntExact((Long) (file.get("pontos")));
+            pontos = ((Long) file.get("pontos")).doubleValue();
 
             JSONArray espacos = (JSONArray) (file.get("mapa"));
             Espaco[] espacoArray = (new Espaco[espacos.size()]);
@@ -47,14 +47,13 @@ public class FileManager{
                 }
             }
             mapa=new Mapa(nome, pontos, espacoArray);
-
             return mapa;
+
         } catch (FileNotFoundException ex) {
             System.out.println("FileNotFound");
         } catch (IOException | ParseException e) {
             System.out.println("Exception");
         }
         return mapaNull;
-
     }
 }

@@ -16,7 +16,7 @@ public class ArrayOrderedList<T> extends ArrayList<T> implements OrderedListADT<
 
     /**
      * Adiciona na lista, em ordem decrescente.
-     * @param element
+     * @param element element
      */
     public void add (T element)
     {
@@ -26,7 +26,7 @@ public class ArrayOrderedList<T> extends ArrayList<T> implements OrderedListADT<
          Comparable<T> temp = (Comparable<T>)element;
 
         int i = 0;
-        while (i < rear && temp.compareTo(list[i]) < 0)
+        while (i < rear && temp.compareTo(list[i]) > 0)
             i++;
 
         for (int j=rear; j > i; j--)

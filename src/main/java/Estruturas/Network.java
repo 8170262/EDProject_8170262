@@ -2,13 +2,12 @@ package Estruturas;
 
 import Interfaces.NetworkADT;
 
-import java.util.Iterator;
-
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
     public Network() {
         super();
     }
+
 
     @Override
     public void addEdge(T vertex1, T vertex2, double weight) {
@@ -17,9 +16,9 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
     /**
      * Cria a matriz de adjacencia
-     * @param vertex1
-     * @param vertex2
-     * @param weight
+     * @param vertex1 vertice1
+     * @param vertex2 vertice2
+     * @param weight peso da aresta
      */
     public void addEdge(int vertex1, int vertex2, double weight) {
         if (vertex1 == -1 || vertex2 == -1) {
@@ -48,7 +47,7 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         while (i < numVertices) {
 
             ligacoes = espacos[i].getLigacoes();
-            Iterator it=ligacoes.iterator();
+            ArrayIterator it=(ArrayIterator)ligacoes.iterator();
             while (it.hasNext()) {
                 String lig=(String) it.next();
                 addEdge( (T) espacos[i], (T) getVertex(lig), (getVertex(lig).getFantasma()+1));
@@ -61,7 +60,16 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
 
     @Override
     public double shortestPathWeight(T vertex1, T vertex2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayIterator it=(ArrayIterator) iteratorShortestPath(vertex1, vertex2);
+        if (it!=null){
+            double vida=0;
+            while (it.hasNext()){
+                Espaco esp=(Espaco) it.next();
+                vida=vida+esp.getFantasma();
+            }
+            return vida;
+        }
+        return Double.POSITIVE_INFINITY;
     }
 
 }

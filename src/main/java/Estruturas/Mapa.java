@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public class Mapa {
     private String nome;
-    private int pontos;
+    private Double pontos;
     private Espaco[] mapa;
 
-    public Mapa(String nome, int pontos, Espaco[] mapa) {
+    public Mapa(String nome, Double pontos, Espaco[] mapa) {
         this.nome = nome;
         this.pontos = pontos;
         this.mapa = mapa;
@@ -21,11 +21,11 @@ public class Mapa {
         this.nome = nome;
     }
 
-    public int getPontos() {
+    public Double getPontos() {
         return pontos;
     }
 
-    public void setPontos(int pontos) {
+    public void setPontos(Double pontos) {
         this.pontos = pontos;
     }
 

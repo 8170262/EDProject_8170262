@@ -1,18 +1,17 @@
 package GUI;
 
-import Estruturas.ArrayOrderedList;
-import Estruturas.ArrayUnorderedList;
-import Estruturas.Network;
-import Estruturas.Mapa;
-import Estruturas.Espaco;
-import Estruturas.Classificacao;
-
-import Estruturas.FileManager;
+import Estruturas.*;
+import Exceptions.EmptyCollectionException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Iterator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
 
 public class MenuGUI extends JFrame{
     private JButton inserirMapaButton;
@@ -42,14 +41,22 @@ public class MenuGUI extends JFrame{
     private JTextField textField1;
     private JButton INSERIRButton;
     private JPanel mapasPanel;
+    private JButton verMapaButton;
+    private JLabel imagePlaying;
+    private JPanel verMapa;
+    private JTextField utilizador;
 
-    private ArrayUnorderedList<Classificacao> classif=new ArrayUnorderedList<>();
+    private ArrayUnorderedList<Classificacao> classif=null;
     private Espaco current=new Espaco("", 0, new ArrayUnorderedList<>());
     private ArrayUnorderedList<Mapa> mapas=new ArrayUnorderedList<>();
     private FileManager fm=new FileManager();
     private Network n;
-    private Mapa mapa=new Mapa(null,0,null);
+    private Mapa mapa=new Mapa(null,0.0,null);
     private Espaco[] espacos;
+    private int bigFant;
+    private int randEscudo=0;
+    private int randApos=-1;
+    private int escudo=0;
 
     private CardLayout cLayout;
 
@@ -58,7 +65,7 @@ public class MenuGUI extends JFrame{
      * Neste metodo é inserido um mapa "default"
      */
     public MenuGUI() {
-        inserirMapa("mapa.json");
+        inserirMapa("mapas\\mapa_defesa01.json");
 
 
 
@@ -70,8 +77,11 @@ public class MenuGUI extends JFrame{
         cardLayout.add(simulacaoCard, "simul");
         cardLayout.add(classifCard, "classif");
         cardLayout.add(homeCard, "home");
+        cardLayout.add(verMapa, "verM");
+
 
         imageHome.setIcon(new ImageIcon("images/backgroundHome.png"));
+        imagePlaying.setIcon(new ImageIcon("images/Playing.png"));
 
         cLayout=(CardLayout) (cardLayout.getLayout());
         cLayout.show(cardLayout,"home");
@@ -120,24 +130,28 @@ public class MenuGUI extends JFrame{
         facilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                cLayout.show(cardLayout,"manual1");
-                manualGame(1,current,100.00);
-
+                if (!utilizador.getText().equals("")){
+                    cLayout.show(cardLayout,"manual1");
+                    setEscudoManualGame(1,current, mapa.getPontos(),utilizador.getText());
+                }
             }
         });
         medioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                cLayout.show(cardLayout,"manual1");
-                manualGame(2,current,100.00);
-
+                if (!utilizador.getText().equals("")){
+                    cLayout.show(cardLayout,"manual1");
+                    setEscudoManualGame(2,current, mapa.getPontos(),utilizador.getText());
+                }
             }
         });
         dificilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                cLayout.show(cardLayout,"manual1");
-                manualGame(3,current,100.00);
+                if (!utilizador.getText().equals("")){
+                    cLayout.show(cardLayout,"manual1");
+                    setEscudoManualGame(3,current, mapa.getPontos(),utilizador.getText());
+                }
             }
         });
         INSERIRButton.addActionListener(new ActionListener() {
@@ -158,6 +172,13 @@ public class MenuGUI extends JFrame{
                 }
             }
         });
+        verMapaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cLayout.show(cardLayout,"verM");
+                verMapa();
+            }
+        });
     }
 
     /**
@@ -167,30 +188,52 @@ public class MenuGUI extends JFrame{
      */
     private void inserirMapa(String path){
         if (!mapas.contains(fm.readFile(path))){
-            mapa = fm.readFile(path);
-            espacos=mapa.getMapa();
-            setNetGraph();
-            mapas.addToRear(mapa);
+            Mapa mapaAux = fm.readFile(path);
+            Network nAux=setNetGraph(mapaAux);
+
+
+            if (mapaAux.getPontos()-nAux.shortestPathWeight(nAux.getVertex("entrada"),nAux.getVertex("exterior"))>0) {
+                mapa = mapaAux;
+                n = nAux;
+                espacos = mapa.getMapa();
+                mapas.addToRear(mapa);
+
+                for (Espaco esp : mapa.getMapa()) {
+                    ArrayIterator iterator = (ArrayIterator) esp.getLigacoes().iterator();
+                    while (iterator.hasNext()) {
+                        String apos = (String) iterator.next();
+                        if (apos.equals("entrada")) {
+                            current = esp;
+                        }
+                    }
+                }
+            }else{
+                System.out.println("Mapa Inválido");
+            }
         }
     }
 
     /**
      * Instancia o grafo para este mapa
      */
-    private void setNetGraph(){
-        n=new Network();
+    private Network setNetGraph(Mapa mapaAux){
+        Network net=new Network();
+        espacos=mapaAux.getMapa();
         int i=0,k=0;
         ArrayUnorderedList<String> arrayExt=new ArrayUnorderedList<>(1);
         while (i < espacos.length) {
-            n.addVertex(espacos[i]);
-            Iterator it=espacos[i].getLigacoes().iterator();
+            net.addVertex(espacos[i]);
+            if (espacos[i].getFantasma()>bigFant){
+                bigFant=espacos[i].getFantasma();
+            }
+            ArrayIterator it=(ArrayIterator) espacos[i].getLigacoes().iterator();
             while(it.hasNext()){
                 String lig=(String)it.next();
                 if(lig.equals("entrada")){
                     ArrayUnorderedList<String> arrayEntrada=new ArrayUnorderedList<>(1);
                     arrayEntrada.addToRear(espacos[i].getAposento());
                     Espaco entrada=new Espaco("entrada",0, arrayEntrada);
-                    n.addVertex(entrada);
+                    net.addVertex(entrada);
                 }
                 if(lig.equals("exterior")){
                     arrayExt.addToRear(espacos[i].getAposento());
@@ -199,27 +242,18 @@ public class MenuGUI extends JFrame{
             i++;
         }
         Espaco exterior=new Espaco("exterior",0, arrayExt);
-        n.addVertex(exterior);
+        net.addVertex(exterior);
 
 
-        n.calculateWeigth();
-
-        for(Espaco esp:mapa.getMapa()){
-            Iterator iterator=esp.getLigacoes().iterator();
-            while (iterator.hasNext()){
-                String apos=(String)iterator.next();
-                if (apos.equals("entrada")){
-                    current=esp;
-                }
-            }
-        }
+        net.calculateWeigth();
+        return net;
     }
 
     /**
      * Metodo para escolher o mapa que quer jogar
      */
     private void chooseMap(){
-        Iterator it=mapas.iterator();
+        ArrayIterator it=(ArrayIterator)mapas.iterator();
         mapasPanel.removeAll();
         while(it.hasNext()){
             Mapa mp=(Mapa) it.next();
@@ -234,7 +268,7 @@ public class MenuGUI extends JFrame{
                     cLayout.show(cardLayout, "home");
                     mapa=mp;
                     espacos=mapa.getMapa();
-                    setNetGraph();
+                    n=setNetGraph(mapa);
                 }
             });
             mapasPanel.add(b);
@@ -243,27 +277,49 @@ public class MenuGUI extends JFrame{
         mapasPanel.repaint();
     }
 
+    private void setEscudoManualGame(int dif, Espaco current,Double vida,String utilizador){
+        Random rand=new Random();
+        randEscudo=rand.nextInt(bigFant);
+        randApos=rand.nextInt(n.size());
+
+        int ok=0, count=0;
+        do {
+            if ((n.getVertex(randApos)).getFantasma() == 0) {
+                ok++;
+            } else {
+                if (randApos<n.size()){
+                    randApos++;
+                }else{
+                    randApos=0;
+                }
+            }
+            count++;
+        }while (ok==0 || count==n.size());
+        System.out.println(n.getVertex(randApos).getAposento());
+        manualGame(n, dif, current, vida,utilizador);
+    }
+
     /**
-     * Método do jogo em manual
+     * Metodo do jogo manual
+     * @param nAux
      * @param dif
      * @param current
      * @param vida
      */
-    private void manualGame( int dif, Espaco current,Double vida){
+    private void manualGame(Network nAux, int dif, Espaco current,Double vida, String utilizador){
         try {
             if (vida > 0) {
                 currentEspLabel.setText("*****Estás no/a " + current.getAposento() + "*****");
                 vidaLabel.setText(vida.toString());
-                Iterator it = n.adjVertex(current);
+                ArrayIterator it = (ArrayIterator)nAux.adjVertex(current);
                 doorPanel.removeAll();
                 while (it.hasNext()) {
                     Espaco espaco = (Espaco) it.next();
                     if (espaco.getAposento().equals("exterior")) {
-                        ImageIcon img = new ImageIcon("images/doorExt.png");
-                        JButton b = new JButton(img);
+                        JButton b = new JButton();
                         b.setText(espaco.getAposento());
                         b.setBackground(Color.BLACK);
-                        b.setForeground(Color.RED);
+                        b.setForeground(Color.GREEN);
                         b.setHorizontalAlignment(SwingConstants.LEFT);
                         b.setVerticalAlignment(SwingConstants.TOP);
                         b.addActionListener(new ActionListener() {
@@ -271,7 +327,8 @@ public class MenuGUI extends JFrame{
                             public void actionPerformed(ActionEvent actionEvent) {
                                 cLayout.show(cardLayout, "manual");
                                 if (vida > 0) {
-                                    addToClassif(vida);
+                                    Classificacao c=new Classificacao(mapa.getNome(), utilizador, vida);
+                                    addToClassification(c);
                                     statusLabel.setText("Conseguiste sair!!!! Com " + vida + " de vida restante.");
                                 } else {
                                     statusLabel.setText("Perdes-te!!! Ficaste sem vida!");
@@ -280,42 +337,37 @@ public class MenuGUI extends JFrame{
                         });
                         doorPanel.add(b);
                     } else {
-                        if (espaco.getFantasma() > 0) {
-                            ImageIcon img = new ImageIcon("images/doorFant.png");
-                            JButton b = new JButton(img);
-                            b.setText(espaco.getAposento());
-                            b.setForeground(Color.RED);
-                            b.setHorizontalAlignment(SwingConstants.LEFT);
-                            b.setVerticalAlignment(SwingConstants.TOP);
-                            b.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent actionEvent) {
-                                    Espaco current1 = espaco;
-                                    Double vida1 = vida - (current1.getFantasma() * dif);
-                                    manualGame(dif, current1, vida1);
+                        JButton b = new JButton();
+                        b.setText(espaco.getAposento());
+                        b.setForeground(Color.RED);
+                        b.setHorizontalAlignment(SwingConstants.LEFT);
+                        b.setVerticalAlignment(SwingConstants.TOP);
+                        b.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent actionEvent) {
+                                Espaco current1 = espaco;
+                                if (current1.equals(n.getVertex(randApos))){
+                                    escudo=randEscudo;
                                 }
-                            });
-                            doorPanel.add(b);
-                        } else {
-                            ImageIcon img = new ImageIcon("images/door.png");
-                            JButton b = new JButton(img);
-                            b.setText(espaco.getAposento());
-                            b.setBackground(Color.BLACK);
-                            b.setForeground(Color.RED);
-                            b.setHorizontalAlignment(SwingConstants.LEFT);
-                            b.setVerticalAlignment(SwingConstants.TOP);
-                            b.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent actionEvent) {
-                                    Espaco current1 = espaco;
-                                    Double vida1 = vida - (current1.getFantasma() * dif);
-                                    manualGame(dif, current1, vida1);
+                                int vidaNeg=0;
+                                if (current1.getFantasma()>0) {
+                                    if (current1.getFantasma() > escudo) {
+                                        vidaNeg = (current1.getFantasma() - escudo) * dif;
+                                        escudo = 0;
+                                    } else {
+                                        vidaNeg = 0;
+                                        escudo = escudo - current1.getFantasma();
+                                    }
                                 }
-                            });
-                            doorPanel.add(b);
+                                System.out.println(current1.getFantasma());
+                                System.out.println(escudo);
+                                Double vida1 = vida - vidaNeg;
+                                manualGame(nAux,dif, current1, vida1,utilizador);
+                            }
+                        });
+                        doorPanel.add(b);
                         }
                     }
-                }
                 doorPanel.validate();
                 doorPanel.repaint();
             } else {
@@ -328,31 +380,57 @@ public class MenuGUI extends JFrame{
     }
 
     /**
-     * Metodo para adicionar a pontuação á classificaçao
-     * @param vida
+     * Método responsável por adicionar um jogador à tabela classificativa
+     *
+     * @param cl classificação a ser adicionada
+     * @return true or false
      */
-    private void addToClassif(Double vida){
-        if (classif.isEmpty()){
-            ArrayOrderedList<Double> db=new ArrayOrderedList<>();
-            db.add(vida);
-            Classificacao cl= new Classificacao(mapa, db);
+    private boolean addToClassification(Classificacao cl) {
+        readCSVFile();
+        File file = new File("files/Classificacoes.csv");
+
+        try {
             classif.addToRear(cl);
-        }else{
-            Iterator it=classif.iterator();
-            int i=0;
-            while (it.hasNext()){
-                Classificacao c=(Classificacao) it.next();
-                if (c.getMapa().equals(mapa)){
-                    c.getVida().add(vida);
-                    i++;
-                }
+            //Escrever no ficheiro
+            String str = "Mapa,Utilizador,Vida\n";
+            FileWriter fw = new FileWriter(file);
+
+            ArrayIterator it=(ArrayIterator) classif.iterator();
+            while (it.hasNext()) {
+                Classificacao cla=(Classificacao) it.next();
+                str += cla.getMapa() + "," + cla.getUtiliador() + "," + cla.getVida() + "\n";
             }
-            if(i==0){
-                ArrayOrderedList<Double> db=new ArrayOrderedList<>();
-                db.add(vida);
-                Classificacao cl= new Classificacao(mapa, db);
-                classif.addToRear(cl);
+            fw.write(str);
+            fw.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Método responsável por ler o ficheiro CSV das tabelas classificativas
+     */
+    public void readCSVFile() {
+        File file = new File("files/Classificacoes.csv");
+
+        try {
+            Scanner reader = new Scanner(file);
+            reader.nextLine();//passa header a frente
+            classif = new ArrayUnorderedList<>();
+
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                String[] dados = data.split(",");
+                classif.addToRear(new Classificacao(dados[0], dados[1], Double.parseDouble(dados[2])));
             }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -363,8 +441,11 @@ public class MenuGUI extends JFrame{
         int i=0;
 
         try {
-            Iterator it = n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
-            Iterator it2 = n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
+            ArrayIterator it =(ArrayIterator) n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
+            //ArrayIterator it2 = (ArrayIterator) n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
+            //ArrayIterator it3 = (ArrayIterator) n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
+            //ArrayIterator it4 = (ArrayIterator) n.iteratorShortestPath(n.getVertex("entrada"), n.getVertex("exterior"));
+
             i = 1;
             simulacaoCard.removeAll();
             JPanel panel = new JPanel();
@@ -376,7 +457,7 @@ public class MenuGUI extends JFrame{
                 Espaco espaco = (Espaco) it.next();
                 JLabel jl = new JLabel(i + "a paragem: " + espaco.getAposento());
                 jl.setForeground(Color.RED);
-                jl.setFont(new Font("Serif", Font.PLAIN, 36));
+                jl.setFont(new Font("Serif", Font.PLAIN, 16));
                 panel.add(jl);
                 i++;
             }
@@ -385,11 +466,13 @@ public class MenuGUI extends JFrame{
             jl.setForeground(Color.RED);
             jl.setFont(new Font("Serif", Font.PLAIN, 36));
             panel.add(jl);
-            double vida = mapa.getPontos() - n.calculatePathWeigth(it2);
-            JLabel jl1 = new JLabel("Vida : " + vida);
+          /*  double vidaF = mapa.getPontos() - n.calculatePathWeigth(it2);
+            double vidaM = mapa.getPontos() - (n.calculatePathWeigth(it3)*2);
+            double vidaD = mapa.getPontos() - (n.calculatePathWeigth(it4)*3);
+            JLabel jl1 = new JLabel("Vida- Fácil:" + vidaF+" | Médio:"+vidaM+" | Dificil:"+vidaD);
             jl1.setForeground(Color.RED);
-            jl1.setFont(new Font("Serif", Font.PLAIN, 36));
-            panel.add(jl1);
+            jl1.setFont(new Font("Serif", Font.PLAIN, 20));
+            panel.add(jl1);*/
             simulacaoCard.add(panel);
             simulacaoCard.validate();
             simulacaoCard.repaint();
@@ -398,11 +481,20 @@ public class MenuGUI extends JFrame{
         }
     }
 
+    private void verMapa(){
+        verMapa.removeAll();
+        verMapa.add(n.verMapa());
+        verMapa.validate();
+        verMapa.repaint();
+    }
+
     /**
      * Metodo que mostra o TOP 10 das pontuaçoes deste mapa
      */
     private void classificacao(){
-        Iterator it=classif.iterator();
+        readCSVFile();
+        classif=orderClassif();
+        ArrayIterator it=(ArrayIterator)classif.iterator();
         classifCard.removeAll();
         JPanel panel= new JPanel();
         BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
@@ -414,33 +506,86 @@ public class MenuGUI extends JFrame{
         panel.add(jl3);
         JLabel jl4=new JLabel(" ");
         jl4.setForeground(Color.RED);
-        jl4.setFont(new Font("Serif", Font.PLAIN, 36));
+        jl4.setFont(new Font("Serif", Font.PLAIN, 20));
         panel.add(jl4);
         JLabel jl=new JLabel(mapa.getNome());
         jl.setForeground(Color.RED);
         jl.setFont(new Font("Serif", Font.PLAIN, 48));
         panel.add(jl);
-        JLabel jl1=new JLabel(" ");
+        JLabel jl21=new JLabel(" ");
+        jl21.setForeground(Color.RED);
+        jl21.setFont(new Font("Serif", Font.PLAIN, 10));
+        panel.add(jl21);
+        JLabel jl1=new JLabel("Utilizador - Vida");
         jl1.setForeground(Color.RED);
         jl1.setFont(new Font("Serif", Font.PLAIN, 36));
         panel.add(jl1);
+        JLabel jl11=new JLabel(" ");
+        jl11.setForeground(Color.RED);
+        jl1.setFont(new Font("Serif", Font.PLAIN, 20));
+        panel.add(jl11);
         int i=0;
-        while(it.hasNext()){
+        while(it.hasNext() && i<10){
             Classificacao cl=(Classificacao) it.next();
-            if (cl.getMapa().equals(mapa)){
-                Iterator it1=cl.getVida().iterator();
-                while (it1.hasNext()&&i<10){
-                    Double vd=(Double) it1.next();
-                    JLabel jl2=new JLabel(vd.toString());
-                    jl2.setForeground(Color.RED);
-                    jl2.setFont(new Font("Serif", Font.PLAIN, 24));
-                    panel.add(jl2);
-                    i++;
-                }
+            if (cl.getMapa().equals(mapa.getNome())){
+                Double vd=cl.getVida();
+                String util=cl.getUtiliador();
+                String str=util+" - "+vd;
+                JLabel jl2=new JLabel(str);
+                jl2.setForeground(Color.RED);
+                jl2.setFont(new Font("Serif", Font.PLAIN, 20));
+                panel.add(jl2);
+                i++;
             }
         }
         classifCard.add(panel);
         classifCard.validate();
         classifCard.repaint();
     }
+
+    /**
+     * Método responsável por ordenar a tabela de classificações
+     *
+     * @return um ArrayUnorderList com os users ordenados
+     * @throws EmptyCollectionException se não existirem users nas classificações
+     */
+    public ArrayUnorderedList<Classificacao> orderClassif() throws EmptyCollectionException {
+        ArrayUnorderedList<Classificacao> tabela = new ArrayUnorderedList<>();
+        ArrayOrderedList<Double> vida = new ArrayOrderedList<>();
+
+        readCSVFile();
+
+        ArrayIterator it = (ArrayIterator) classif.iterator();
+        while (it.hasNext()) {
+            Classificacao cl = (Classificacao) it.next();
+            vida.add(cl.getVida());
+        }
+        ArrayUnorderedList<Integer> contemNaTabela = new ArrayUnorderedList<>();
+
+        Classificacao[] classificacaos;
+
+        ArrayIterator it2 = (ArrayIterator) classif.iterator();
+        int j = 0;
+        Classificacao[] temp = new Classificacao[classif.size()];
+        while (it2.hasNext()) {
+            Classificacao cla = (Classificacao) it2.next();
+            temp[j] = cla;
+            j++;
+        }
+        classificacaos = temp;
+
+        for (int i = 0; i < classificacaos.length; ) {
+            if (!contemNaTabela.contains(i) && vida.last() == classificacaos[i].getVida()) {
+                contemNaTabela.addToRear(i);
+                vida.removeLast();
+
+                tabela.addToRear(classificacaos[i]);
+                i = 0;
+            } else {
+                i++;
+            }
+        }
+        return tabela;
+    }
+
 }

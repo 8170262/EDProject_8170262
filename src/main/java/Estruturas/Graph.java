@@ -1,9 +1,13 @@
 package Estruturas;
 
 
+import Exceptions.EmptyCollectionException;
 import Interfaces.GraphADT;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Iterator;
+
 
 public class Graph<T> implements GraphADT<T> {
 
@@ -41,7 +45,7 @@ public class Graph<T> implements GraphADT<T> {
     /**
      * Método que retorna o index de um vértice
      *
-     * @param vertex
+     * @param vertex vertice
      * @return index corresponde ao vertice ou -1 caso o vértice não exista na
      * nossa lista de vértices
      */
@@ -59,7 +63,7 @@ public class Graph<T> implements GraphADT<T> {
     /**
      * Método que adiciona vertice
      *
-     * @param vertex
+     * @param vertex vertice
      */
     @Override
     public void addVertex(T vertex) {
@@ -107,8 +111,8 @@ public class Graph<T> implements GraphADT<T> {
 
     /**
      * Metodo para encontrar o vertice apartir do nome
-     * @param aposento
-     * @return
+     * @param aposento nome do aposento
+     * @return Espaco com aquele nome
      */
     public Espaco getVertex(String aposento) {
         int i = 0;
@@ -129,16 +133,20 @@ public class Graph<T> implements GraphADT<T> {
         return null;
     }
 
+    public Espaco getVertex(int i) {
+        return (Espaco) vertices[i];
+    }
+
     /**
      * Metodo para descobrir as ligaçoes deste vertice
-     * @param vertex
+     * @param vertex vertice
      * @return retorna o iterador de uma lista com as ligaçoes do vertice
      */
     public Iterator adjVertex(T vertex) {
         Integer x, startVertexaux, j = 0;
         startVertexaux = getVertexIndex(vertex);
 
-        LinkedQueue<Integer> traversalQueue = new LinkedQueue<Integer>();
+        LinkedQueue<Integer> traversalQueue = new LinkedQueue<>();
         ArrayUnorderedList<T> resultList = new ArrayUnorderedList<>();
 
         if (startVertexaux == -1) {
@@ -248,135 +256,167 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
+
     /**
-     * Metodo que devolve um iterador com o caminho com menos peso entre 2 vertices
-     * @param startVertex the starting vertex
-     * @param targetVertex the ending vertex
-     * @return
+     * Método que retorna um iterador que contém o caminho mais curto entre os dois vértices.
+     *
+     * @param startVertex vertice incial
+     * @param targetVertex vertice destino
+     * @return um iterador com o caminho mais curto entre os dois vértices
      */
     @Override
     public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
-        Integer x, startVertexaux, targetVertexaux, aux;
-        startVertexaux = getVertexIndex(startVertex);
-        targetVertexaux = getVertexIndex(targetVertex);
 
-        int index;
-        double weight;
-        int[] predecessor = new int[numVertices];
-        LinkedHeap<Double> traversalMinHeap = new LinkedHeap<Double>();
-        ArrayUnorderedList resultList = new ArrayUnorderedList();
-        LinkedStack<Integer> stack = new LinkedStack<Integer>();
+        Iterator iterator = null;
 
-        int[] pathIndex = new int[numVertices];
-        double[] pathWeight = new double[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            pathWeight[i] = Double.POSITIVE_INFINITY;
-        }
+        // obtém os indices dos vértices
+        int source = this.getIndex(startVertex);
+        int destination = this.getIndex(targetVertex);
 
-        boolean[] visited = new boolean[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            visited[i] = false;
-        }
-
-        if (!indexIsValid(startVertexaux) || !indexIsValid(targetVertexaux)
-                || (startVertexaux == targetVertexaux) || isEmpty()) {
-            return resultList.iterator();
-        }
-
-        pathWeight[startVertexaux] = 0;
-        predecessor[startVertexaux] = 0;
-        visited[startVertexaux] = true;
-        weight = 0;
-
-        for (int i = 0; i < numVertices; i++) {
-            if (!visited[i] && adjMatrix[startVertexaux][i] > 0) {
-                pathWeight[i] = pathWeight[startVertexaux] + adjMatrix[startVertexaux][i];
-                predecessor[i] = startVertexaux;
-                traversalMinHeap.addElement(pathWeight[i]);
-            }
-        }
-        if (!traversalMinHeap.isEmpty()) {
-            do {
-                weight = (traversalMinHeap.removeMin());
-                while (!traversalMinHeap.isEmpty()) {
-                    traversalMinHeap.removeMin();
-                }
-                if (weight == Double.POSITIVE_INFINITY) {
-                    return resultList.iterator();
-                } else {
-                    index = getIndexOfAdjVertexWithWeightOf(visited, pathWeight, weight);
-                    visited[index] = true;
-                }
-
-                for (int i = 0; i < numVertices; i++) {
-                    if (!visited[i]) {
-                        if ((adjMatrix[index][i] < Double.POSITIVE_INFINITY) && (adjMatrix[index][i] > 0) && (pathWeight[index] + adjMatrix[index][i]) < pathWeight[i]) {
-                            pathWeight[i] = pathWeight[index] + adjMatrix[index][i];
-                            predecessor[i] = index;
-                        }
-                        traversalMinHeap.addElement(pathWeight[i]);
-                    }
-                }
-            } while (!traversalMinHeap.isEmpty() && !visited[targetVertexaux]);
-
-            index = targetVertexaux;
-            stack.push(index);
-            do {
-                index = predecessor[index];
-                stack.push(index);
-            } while (index != startVertexaux);
-
-            while (!stack.isEmpty()) {
-                aux = stack.pop();
-
-                resultList.addToRear(vertices[aux]);
-
+        // se os dois indices forem válidos, significa que os vértices existem
+        if (this.indexIsValid(source) && this.indexIsValid(destination)) {
+            try {
+                //aplica o algoritmo de dijkstra que indica o caminho mais curto entre os 2 vértices
+                iterator = this.dijkstra(source, destination);
+            } catch (EmptyCollectionException e) {
+                e.printStackTrace();
             }
         }
 
-        return resultList.iterator();
-    }
-
-    public int getIndexOfAdjVertexWithWeightOf(boolean[] visited,
-                                               double[] pathWeight, double weight) {
-        for (int i = 0; i < numVertices; i++) {
-            if ((pathWeight[i] == weight) && !visited[i]) {
-                for (int j = 0; j < numVertices; j++) {
-                    if ((adjMatrix[i][j] < Double.POSITIVE_INFINITY)
-                            && visited[j]) {
-                        return i;
-                    }
-                }
-            }
-        }
-
-        return -1;
+        // retorna o iterador
+        return iterator;
     }
 
     /**
-     * Calcula o peso do caminho daquele Iterador
-     * @param path
-     * @return
+     * Método que retorna um iterador com o caminho mais curto.
+     * Este método é calculado com a ajuda do algoritmo Dijkstra.
+     *
+     * @param origem
+     * @param destino
+     * @return um iterador com caminho mais curto entre os dois vértices
      */
-    public double calculatePathWeigth(Iterator path) {
-        Espaco[] espacos = new Espaco[numVertices];
-        Iterator pathAux;
-        pathAux = path;
-        int i = 0, j = 0;
-        double weight = 0;
+    private Iterator dijkstra(int origem, int destino)  {
 
-        while (pathAux.hasNext()) {
-            espacos[i] = (Espaco) pathAux.next();
-            i++;
+        // lista para a distancia de cada vertice
+        double[] distancia = new double[this.numVertices];
+
+        // lista que vai guardar o melhor caminho
+        Integer[] anterior = new Integer[this.numVertices];
+
+        // definir todos os valores da lista a null
+        for (int i = 0; i < this.numVertices; i++) {
+            anterior[i] = null;
         }
 
-        i--;
-        while (j < i) {
-            weight = weight + espacos[j + 1].getFantasma();
-            j++;
+        // lista que marca os vertices visitados
+        boolean[] vertices_visitados = new boolean[this.numVertices];
+
+        for (int i = 0; i < this.numVertices; i++) {
+
+            // define a distância de cada vertice com valor infinito
+            distancia[i] = Double.POSITIVE_INFINITY;
+
+            // define todos os vertices como não usados
+            vertices_visitados[i] = false;
         }
 
-        return weight;
+        // distância do vertice de origem
+        distancia[origem] = 0;
+
+        for (int i = 0; i < this.numVertices - 1; i++) {
+
+            // valor de menor custo
+            int vertice_menorCusto = minDistance(distancia, vertices_visitados);
+
+            // coloca o vertice de menor custo como visitado
+            vertices_visitados[vertice_menorCusto] = true;
+
+            for (int j = 0; j < this.numVertices; j++) {
+
+                // se o vertice ainda nao tiver sido visitado
+                if (!vertices_visitados[j] && this.adjMatrix[vertice_menorCusto][j] != 0.0 && distancia[vertice_menorCusto] != Double.POSITIVE_INFINITY
+                        && distancia[vertice_menorCusto] + this.adjMatrix[vertice_menorCusto][j] < distancia[j]) {
+
+                    distancia[j] = distancia[vertice_menorCusto] + this.adjMatrix[vertice_menorCusto][j];
+
+                    anterior[j] = vertice_menorCusto;
+                }
+            }
+        }
+
+        // lista que irá receber o valor dos vértices
+        ArrayUnorderedList<T> resultList = new ArrayUnorderedList<>();
+        Integer target = destino;
+
+
+        if (anterior[target] != null) {
+            while (target != null){
+                resultList.addToFront(this.vertices[target]);
+                target = anterior[target];
+            }
+        }
+
+        // retorna o iterador
+        return resultList.iterator();
+    }
+
+    /**
+     * Calcula o caminho de menor custo entre os vértices.
+     *
+     * @param distancias array com as distancias
+     * @param vertices_visitados array com os status dos vertices
+     * @return valor do menor custo
+     */
+    protected int minDistance(double distancias[], boolean vertices_visitados[]) {
+
+        // valor do caminho mais curto
+        double minDistance = Double.POSITIVE_INFINITY;
+
+        // indice do caminho mais curto
+        int minDistanceIndex = -1;
+
+        for (int i = 0; i < this.numVertices; i++) {
+
+            // se a distancia do vertice for menor que o valor do caminho mais curto e o vertice não tiver sido usado
+            if (!vertices_visitados[i] && distancias[i] <= minDistance) {
+
+                // a distancia passa a ser o valor do caminho mais curto
+                minDistance = distancias[i];
+
+                // guarda o valor do indice
+                minDistanceIndex = i;
+            }
+        }
+
+        // retorna o valor de menor custo
+        return minDistanceIndex;
+    }
+
+    /**
+     * Método que obtém o índice do vertice inserido. Caso o vértice não exista
+     * retorna -1
+     *
+     * @param vertex vertice a verificar
+     * @return índice do vértice
+     */
+    protected int getIndex(T vertex) {
+
+        // se o vértice for nulo
+        if (vertex == null) {
+            return -1;
+        }
+
+        // Percorrer o array de vértices
+        for (int i = 0; i < vertices.length; i++) {
+
+            // Se o vertice introduzido for igual ao vertice da posição atual
+            if (vertex.equals(vertices[i])) {
+                return i; // Retornar o index da posição atual
+            }
+        }
+
+        // se o vértice não for encontrado, retorna -1
+        return -1;
     }
 
     @Override
@@ -386,17 +426,17 @@ public class Graph<T> implements GraphADT<T> {
 
     /**
      *
-     * @return
+     * @return true or false
      */
     @Override
     public boolean isConnected() {
-        Iterator itr;
+        ArrayIterator itr;
         int contador = 0, i = 0;
         boolean re, entrou = false;
 
         while (i < numVertices) {
             entrou = true;
-            itr = iteratorBFS(vertices[i]);
+            itr = (ArrayIterator)iteratorBFS(vertices[i]);
 
             while (itr.hasNext()) {
                 itr.next();
@@ -416,13 +456,7 @@ public class Graph<T> implements GraphADT<T> {
     }
 
     @Override
-    public int size() {
-        int i = 0;
-
-        while (i < vertices.length && vertices[i] != null) {
-            i++;
-        }
-        return i;
+    public int size() {return numVertices;
     }
 
     protected void expandCapacityArray() {
@@ -459,5 +493,29 @@ public class Graph<T> implements GraphADT<T> {
             matriz = matriz + "\n";
         }
         return matriz;
+    }
+
+    public JPanel verMapa() {
+        JPanel panel = new JPanel();
+        BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(boxlayout);
+        panel.setBackground(Color.BLACK);
+
+        int i = 0, j = 0;
+        while (i < adjMatrix.length) {
+            while (j < i+1) {
+                if(adjMatrix[i][j] != 0){
+                    JLabel jl = new JLabel(((Espaco)vertices[i]).getAposento()+"<---->"+((Espaco)vertices[j]).getAposento());
+                    System.out.println(((Espaco)vertices[i]).getAposento()+"<---->"+((Espaco)vertices[j]).getAposento());
+                    jl.setForeground(Color.RED);
+                    jl.setFont(new Font("Serif", Font.PLAIN, 16));
+                    panel.add(jl);
+                }
+                j++;
+            }
+            j = 0;
+            i++;
+        }
+        return panel;
     }
 }
